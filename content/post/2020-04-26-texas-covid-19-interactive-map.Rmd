@@ -72,7 +72,7 @@ I am interested in the cases, the cases per 100,000 population, the number of de
 I create specialized bins for the color coding because of the weird distribution of the data. 
 
 
-```{r, results='hide'}
+```{r, eval=T,echo=T}
 
 tx2$casepop=(tx2$cases/tx2$estimate*100000)
 tx2$casepop=round(tx2$casepop, digits = 1)
@@ -111,7 +111,7 @@ I wouldn't need a widget if I only wanted to build one leaflet map. The leaflet 
 The WIDGET function allows me to create four different leaflets and put them all on one page, which is pretty nice.
 
 
-```{r, results='hide'}
+```{r, eval=T,echo=T}
 
 
 myWidget <- combineWidgets(ncol=2,title='Covid-19 Cases in Texas',
