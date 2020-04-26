@@ -1,0 +1,122 @@
+---
+title: Texas Covid-19 Interactive Map
+author: Skip Krueger
+date: '2020-04-26'
+slug: texas-covid-19-interactive-map
+categories: []
+tags: []
+description: "Leaflet map of covid-19 cases in Texas counties."
+---
+
+
+
+<p>Using LEAFLET and WIDGET to map Covid-19 cases in Texas counties. Map clickable popups.
+<BR>
+<BR><BR><BR><BR></p>
+<div id="libraries-needed" class="section level4">
+<h4>Libraries needed:</h4>
+<pre class="r"><code>library(sf);library(raster);library(dplyr);library(spData);
+library(tmap);library(leaflet); library(mapview); library(ggplot2); library(shiny);  
+library(rgdal);library(broom);library(tidyverse);library(tigris); library(rgdal);
+library(htmltools);library(viridis); library(raster);library(sp);library(RCurl);
+library(tidycensus);library(tidyverse);library(tmaptools);library(manipulateWidget);
+library(leaflet.minicharts)</code></pre>
+<p>(well, OK, I don’t need all those libraries for this function, but I just keep that chuck for all my mapping needs.)</p>
+</div>
+<div id="get-the-data" class="section level4">
+<h4>Get the data</h4>
+<p>For this, we need geometry data, which we can get from the tigris library (which is great for scraping the Census Tiger shapefiles) and in the ACS files if we use the tidycensus library. The ACS file is great because it has the geometry AND the population data, but you have to know which Census table to pull (identified by the “variables” option in the code. See the tidycensus descriptions for more details on this cool library.</p>
+<p>I overdo it here by pulling the ACS data (“get_acs”) AND the Tiger files (texas &lt;- counties). But it works. I should go back and clean up this code and make it shorter.</p>
+<pre class="r"><code>tigris_year = 2019
+#key=&quot;get-yours-from-Census&quot; #&lt;----type your apicode here
+#readRenviron(&quot;~/.Renviron&quot;)
+#Sys.setenv(CENSUS_KEY=&#39;get-yours-from-Census&#39;)#&lt;----type your apicode here again
+options(tigris_use_cache = TRUE)
+
+pop &lt;- get_acs(geography = &quot;county&quot;, variables = &#39;B01003_001&#39;, 
+            state = &quot;TX&quot;, survey=&#39;acs5&#39;,geometry = TRUE,year=2018) 
+
+covt &lt;- read.csv(text=getURL(
+  &quot;https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv&quot;))
+
+covt=filter(covt,state == &#39;Texas&#39;,date==&#39;2020-04-24&#39;) # DATE FILTER HERE
+
+texas &lt;- counties(state = &#39;TX&#39;, cb = TRUE, resolution = &#39;20m&#39;)
+
+txcov &lt;- geo_join(texas,covt, &quot;NAME&quot;,&quot;county&quot;)
+txcov$cases[is.na(txcov$cases)] &lt;- 0
+txcov$deaths[is.na(txcov$deaths)] &lt;- 0
+tx2 &lt;- geo_join(txcov,pop,&#39;GEOID&#39;,&#39;GEOID&#39;)
+rm(covt,texas,txcov,pop)</code></pre>
+</div>
+<div id="set-up-the-map" class="section level4">
+<h4>Set up the map</h4>
+<p>I am interested in the cases, the cases per 100,000 population, the number of deaths, and the number of deaths per 100,000. The per 100,000 measures need to be calculated from the population data pulled from the ACS.</p>
+<p>I create specialized bins for the color coding because of the weird distribution of the data.</p>
+<pre class="r"><code>tx2$casepop=(tx2$cases/tx2$estimate*100000)
+tx2$casepop=round(tx2$casepop, digits = 1)
+tx2$deathpop=(tx2$deaths/tx2$estimate*100000)
+tx2$deathpop=round(tx2$deathpop, digits = 1)
+
+
+mybins &lt;- c(0,1,10,50,100,500,Inf)
+binpalet &lt;- colorBin(&#39;viridis&#39;,tx2$cases,mybins)
+pops &lt;- paste(&quot;&lt;strong&gt;County: &lt;/strong&gt;&quot;,tx2$NAME,
+              &quot;&lt;br&gt;&lt;strong&gt;Cases:  &lt;/strong&gt;&quot;, tx2$cases)
+
+mybins2 &lt;- c(0,1,5,10,20,40,60,Inf)
+binpalet2 &lt;- colorBin(&#39;viridis&#39;,tx2$casepop,mybins2)
+pops2 &lt;- paste(&quot;&lt;strong&gt;County: &lt;/strong&gt;&quot;,tx2$NAME,
+              &quot;&lt;br&gt;&lt;strong&gt;Cases Per 100,000:  &lt;/strong&gt;&quot;, tx2$casepop,
+              &quot;&lt;br&gt;&lt;strong&gt;Total Cases:  &lt;/strong&gt;&quot;, tx2$cases)
+
+mybins3 &lt;- c(0,1,2,4,6,8,10,12,Inf)
+binpalet3 &lt;- colorBin(&#39;viridis&#39;,tx2$deaths,mybins3)
+pops3 &lt;- paste(&quot;&lt;strong&gt;County: &lt;/strong&gt;&quot;,tx2$NAME,
+               &quot;&lt;br&gt;&lt;strong&gt;Deaths:  &lt;/strong&gt;&quot;, tx2$deaths)
+
+mybins4 &lt;- c(0,1,2,3,4,5,10,Inf)
+binpalet4 &lt;- colorBin(&#39;viridis&#39;,tx2$deathpop,mybins4)
+pops4 &lt;- paste(&quot;&lt;strong&gt;County: &lt;/strong&gt;&quot;,tx2$NAME,
+               &quot;&lt;br&gt;&lt;strong&gt;Deaths Per 100,000:  &lt;/strong&gt;&quot;, tx2$deathpop,
+               &quot;&lt;br&gt;&lt;strong&gt;Total Deaths:  &lt;/strong&gt;&quot;, tx2$deaths)</code></pre>
+</div>
+<div id="make-the-leaflets" class="section level4">
+<h4>Make the leaflets</h4>
+<p>I wouldn’t need a widget if I only wanted to build one leaflet map. The leaflet map is nice compared to other formats because of the interactivity. I could have done this in other ways, but I was interested in the leaflet version for this.</p>
+<p>The WIDGET function allows me to create four different leaflets and put them all on one page, which is pretty nice.</p>
+<pre class="r"><code>myWidget &lt;- combineWidgets(ncol=2,title=&#39;Covid-19 Cases in Texas&#39;,
+# 1
+ leaflet(data=tx2) %&gt;%
+    addTiles() %&gt;%
+    addPolygons(smoothFactor = 0.2,
+              weight=.6,color = ~binpalet(cases), fillOpacity = .8,
+              popup = pops)%&gt;%
+    addLegend(&quot;bottomright&quot;, pal = binpalet, values = ~cases,
+            title = &quot;Cases&quot;,opacity = .5),
+ # 2
+  leaflet(data=tx2) %&gt;%
+    addTiles() %&gt;%
+    addPolygons(smoothFactor = 0.2,
+                weight=.6,color = ~binpalet2(casepop), fillOpacity = .8,
+                popup = pops2)%&gt;%
+    addLegend(&quot;bottomright&quot;, pal = binpalet2, values = ~casepop,
+              title = &quot;Cases per 100,000&quot;,opacity = .5),
+# 3
+leaflet(data=tx2) %&gt;%
+  addTiles() %&gt;%
+  addPolygons(smoothFactor = 0.2,
+              weight=.6,color = ~binpalet3(deaths), fillOpacity = .8,
+              popup = pops3)%&gt;%
+  addLegend(&quot;bottomright&quot;, pal = binpalet3, values = ~deaths,
+            title = &quot;Deaths&quot;,opacity = .5),
+# 4
+leaflet(data=tx2) %&gt;%
+  addTiles() %&gt;%
+  addPolygons(smoothFactor = 0.2,
+              weight=.6,color = ~binpalet4(deathpop), fillOpacity = .8,
+              popup = pops4)%&gt;%
+  addLegend(&quot;bottomright&quot;, pal = binpalet4, values = ~deathpop,
+            title = &quot;Deaths per 100,000&quot;,opacity = .5))
+myWidget</code></pre>
+</div>
