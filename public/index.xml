@@ -12,16 +12,14 @@
     
     
     <item>
-      <title>Covid-19 in Texas</title>
+      <title>Evolution of Covid-19 in Texas</title>
       <link>/post/covidan/</link>
       <pubDate>Sat, 25 Apr 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/covidan/</guid>
-      <description>
-
-
-&lt;p&gt;Using GGANIMATE to map Covid-19 cases in Texas counties over time&lt;/p&gt;
-</description>
+      <description>Using GGANIMATE to map Covid-19 cases in Texas counties over time.
+Making a map of Texas counties with Coronavirus cases, and tracking the cases over time. The goal is to show the evolution of the virus in Texas for every Friday for which there is data. This is cumulative cases, not new cases.
+Libraries needed:library(sf);library(raster);library(dplyr);library(spData);library(tmap);library(leaflet); library(mapview); library(ggplot2); library(shiny); library(rgdal);library(broom);library(tidyverse);library(tigris); library(rgdal);library(htmltools);library(viridis); library(raster);library(sp);library(RCurl);library(tidycensus);library(tmaptools);library(manipulateWidget); library(maps); library(tidyverse);library(leaflet.minicharts); library(gganimate)(well, OK, I don’t need all those libraries for this function, but I just keep that chuck for all my mapping needs.</description>
     </item>
     
   </channel>
