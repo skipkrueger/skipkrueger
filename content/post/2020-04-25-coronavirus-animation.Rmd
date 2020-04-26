@@ -7,6 +7,7 @@ draft: false
 image: img/portfolio/try1.gif
 showonlyimage: False
 weight: 1
+description: "Making a map of Texas counties with Coronavirus cases, and tracking the cases over time. The goal is to show the evolution of the virus in Texas for every Friday for which there is data. This is cumulative cases, not new cases."
 ---
 
 ```{r setup, include=FALSE}
