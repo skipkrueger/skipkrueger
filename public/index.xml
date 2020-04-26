@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Skip Krueger</title>
-    <link>/</link>
+    <link>/skipkrueger.netlify.app/</link>
     <description>Recent content on Skip Krueger</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 25 Apr 2020 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/skipkrueger.netlify.app/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Covid-19 in Texas</title>
-      <link>/post/covidan/</link>
+      <link>/skipkrueger.netlify.app/post/covidan/</link>
       <pubDate>Sat, 25 Apr 2020 00:00:00 +0000</pubDate>
       
-      <guid>/post/covidan/</guid>
+      <guid>/skipkrueger.netlify.app/post/covidan/</guid>
       <description>
 
 
