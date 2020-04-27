@@ -7,7 +7,7 @@ draft: false
 image: img/portfolio/try1.gif
 showonlyimage: False
 weight: 1
-description: "Making a map of Texas counties with Coronavirus cases, and tracking the cases over time. The goal is to show the evolution of the virus in Texas for every Friday for which there is data. This is cumulative cases, not new cases."
+description: Using GGPLOT, GGANIMATE, and GEOM_SF to trace the distribution of the coronavirus in Texas over time.
 ---
 
 
@@ -109,6 +109,7 @@ m</code></pre>
 <div id="making-the-map" class="section level4">
 <h4>Making the map</h4>
 <p>Finally, I want the map. I can use a facet version or a gganimate version.</p>
+<p>Note that I’m using transition_manual here, which does not have any blending from one time point to another. I wasn’t able to figure out how to utilize other possible transition types in combination with geom_sf, which I utilize instead of geom_polygon because I think the map looks better here.</p>
 <pre class="r"><code>m &lt;- ggplot(txgeo) +
   geom_sf(aes(fill=cat),color=&#39;white&#39;)+
   scale_size_identity(.001)+

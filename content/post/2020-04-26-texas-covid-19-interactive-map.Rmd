@@ -2,8 +2,8 @@
 title: Texas Covid-19 Interactive Map
 author: Skip Krueger
 date: '2020-04-26'
-slug: texas-covid-19-interactive-map
-description: Interactive map of covid-19 cases in Texas counties.
+slug: tx-covid-interactive-map
+description: Combining LEAFLET and WIDGET in R to build a dashboard of interactive maps of covid-19 cases in Texas counties.
 image: img/portfolio/covmap.jpeg
 showonlyimage: False
 weight: 1
@@ -14,7 +14,7 @@ weight: 1
 knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
 ```
 
-Using LEAFLET and WIDGET to map Covid-19 cases in Texas counties. Map clickable popups.
+Using LEAFLET and WIDGET to map Covid-19 cases in Texas counties. Map clickable popups. The mapped data represents total cumulative cases as of the date in the code below, as recorded by the New York Times and reported in its github repository of data on the coronavirus.
 <BR>
 <BR><BR><BR><BR>
 
