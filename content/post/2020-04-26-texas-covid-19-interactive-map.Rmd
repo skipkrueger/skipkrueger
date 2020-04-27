@@ -3,7 +3,7 @@ title: Texas Covid-19 Interactive Map
 author: Skip Krueger
 date: '2020-04-26'
 slug: tx-covid-interactive-map
-description: Combining LEAFLET and WIDGET in R to build a dashboard of interactive maps of covid-19 cases in Texas counties.
+description: "Combining `LEAFLET` and `WIDGET` in R to build a dashboard of interactive maps of covid-19 cases in Texas counties."
 image: img/portfolio/covmap.jpeg
 showonlyimage: False
 weight: 1
@@ -14,7 +14,7 @@ weight: 1
 knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
 ```
 
-Using LEAFLET and WIDGET to map Covid-19 cases in Texas counties. Map clickable popups. The mapped data represents total cumulative cases as of the date in the code below, as recorded by the New York Times and reported in its github repository of data on the coronavirus.
+Using `LEAFLET` and `WIDGET` to map Covid-19 cases in Texas counties. Map clickable popups. The mapped data represents total cumulative cases as of the date in the code below, as recorded by the New York Times and reported in its github repository of data on the coronavirus.
 <BR>
 <BR><BR><BR><BR>
 
@@ -33,9 +33,9 @@ library(leaflet.minicharts)
 
 #### Get the data
 
-For this, we need geometry data, which we can get from the tigris library (which is great for scraping the Census Tiger shapefiles) and in the ACS files if we use the tidycensus library. The ACS file is great because it has the geometry AND the population data, but you have to know which Census table to pull (identified by the "variables" option in the code. See the tidycensus descriptions for more details on this cool library.
+For this, we need geometry data, which we can get from the `tigris` library (which is great for scraping the Census Tiger shapefiles) and in the ACS files if we use the `tidycensus` library. The ACS file is great because it has the geometry AND the population data, but you have to know which Census table to pull (identified by the "variables" option in the code. See the `tidycensus` descriptions for more details on this cool library.
 
-I overdo it here by pulling the ACS data ("get_acs") AND the Tiger files (texas <- counties). But it works. I should go back and clean up this code and make it shorter.
+I overdo it here by pulling the ACS data (`get_acs`) AND the Tiger files (`texas <- counties`). But it works. I should go back and clean up this code and make it shorter.
 
 
 ```{r, results='hide'}
@@ -69,7 +69,7 @@ rm(covt,texas,txcov,pop)
 
 I am interested in the cases, the cases per 100,000 population, the number of deaths, and the number of deaths per 100,000. The per 100,000 measures need to be calculated from the population data pulled from the ACS.
 
-I create specialized bins for the color coding because of the weird distribution of the data. 
+I create specialized `bins` for the color coding because of the weird distribution of the data. 
 
 
 ```{r, eval=T,echo=T}
@@ -106,9 +106,9 @@ pops4 <- paste("<strong>County: </strong>",tx2$NAME,
 
 #### Make the leaflets
 
-I wouldn't need a widget if I only wanted to build one leaflet map. The leaflet map is nice compared to other formats because of the interactivity. I could have done this in other ways, but I was interested in the leaflet version for this.
+I wouldn't need a `widget` if I only wanted to build one `leaflet` map. The leaflet map is nice compared to other formats because of the interactivity. I could have done this in other ways, but I was interested in the leaflet version for this.
 
-The WIDGET function allows me to create four different leaflets and put them all on one page, which is pretty nice.
+The `WIDGET` function allows me to create four different leaflets and put them all on one page, which is pretty nice.
 
 
 ```{r, eval=T,echo=T}
