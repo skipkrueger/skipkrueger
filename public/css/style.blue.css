@@ -32,7 +32,7 @@ section.background-gray-lightest {
   border-bottom: solid 1px #cdcdcd;
 }
 section.background-secondary {
-  background: #fc888a;
+  background: #f7f7f7;
   border-top: solid 1px #f92528;
   border-bottom: solid 1px #f92528;
 }
@@ -300,8 +300,8 @@ fieldset[disabled] .btn-white.active {
   text-align: center;
 }
 .icon.brand-secondary {
-  border-color: #fc888a;
-  color: #fc888a;
+  border-color: #2065a1;
+  color: #2065a1;
 }
 .icon.brand-terciary {
   border-color: #37123c;

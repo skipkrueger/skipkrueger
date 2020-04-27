@@ -7,7 +7,7 @@ draft: false
 image: img/portfolio/try1.gif
 showonlyimage: False
 weight: 1
-description: "Using `GGPLOT`, `GGANIMATE`, and `GEOM_SF` to trace the distribution of the coronavirus in Texas over time."
+description: Using GGPLOT, GGANIMATE, and GEOM_SF to trace the distribution of the coronavirus in Texas over time.
 ---
 
 ```{r setup, include=FALSE}

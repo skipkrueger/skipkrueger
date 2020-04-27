@@ -3,7 +3,7 @@ title: Texas Covid-19 Interactive Map
 author: Skip Krueger
 date: '2020-04-26'
 slug: tx-covid-interactive-map
-description: "Combining `LEAFLET` and `WIDGET` in R to build a dashboard of interactive maps of covid-19 cases in Texas counties."
+description: Combining LEAFLET and WIDGET in R to build a dashboard of interactive maps of covid-19 cases in Texas counties.
 image: img/portfolio/covmap.jpeg
 showonlyimage: False
 weight: 1
