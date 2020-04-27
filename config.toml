@@ -1,4 +1,4 @@
-baseurl = "https://skipkrueger.netlify.app"
+baseurl = "https://skipkrueger.com"
 title = "Skip Krueger"
 theme = "hugo-creative-portfolio-theme"
 languageCode = "en-us"
