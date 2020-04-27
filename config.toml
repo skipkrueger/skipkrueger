@@ -11,7 +11,7 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
   description = "Data scientist and scholar"
   copyright = "&copy;2020 Skip Krueger"
   sidebarAbout = [
-    "Associate professor, data scientist, passionate advocate for public service",
+    "Data scientist, associate professor, passionate advocate for public service.",
     "Specializing in state and local public finance, local political economy, and fiscal effects of disasters.",
 #    "Currently a tenured associate professor of public administration in Denton, Texas.",
     "<BR>","<BR>","<BR>","<BR>","<BR>","<BR>","<BR>","<BR>"
