@@ -2,31 +2,32 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on Skip Krueger</title>
-    <link>/post/</link>
+    <link>https://skipkrueger.com/post/</link>
     <description>Recent content in Posts on Skip Krueger</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 26 Apr 2020 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://skipkrueger.com/post/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Texas Covid-19 Interactive Map</title>
-      <link>/post/tx-covid-interactive-map/</link>
+      <link>https://skipkrueger.com/post/tx-covid-interactive-map/</link>
       <pubDate>Sun, 26 Apr 2020 00:00:00 +0000</pubDate>
       
-      <guid>/post/tx-covid-interactive-map/</guid>
+      <guid>https://skipkrueger.com/post/tx-covid-interactive-map/</guid>
       <description>Using LEAFLET and WIDGET to map Covid-19 cases in Texas counties. Map clickable popups. The mapped data represents total cumulative cases as of the date in the code below, as recorded by the New York Times and reported in its github repository of data on the coronavirus.
-Libraries needed:library(sf);library(raster);library(dplyr);library(spData);library(tmap);library(leaflet); library(mapview); library(ggplot2); library(shiny); library(rgdal);library(broom);library(tidyverse);library(tigris); library(rgdal);library(htmltools);library(viridis); library(raster);library(sp);library(RCurl);library(tidycensus);library(tidyverse);library(tmaptools);library(manipulateWidget);library(leaflet.minicharts)(well, OK, I don’t need all those libraries for this function, but I just keep that chuck for all my mapping needs.</description>
+For an example of this in action, see this website.
+Libraries needed:library(sf);library(raster);library(dplyr);library(spData);library(tmap);library(leaflet); library(mapview); library(ggplot2); library(shiny); library(rgdal);library(broom);library(tidyverse);library(tigris); library(rgdal);library(htmltools);library(viridis); library(raster);library(sp);library(RCurl);library(tidycensus);library(tidyverse);library(tmaptools);library(manipulateWidget);library(leaflet.</description>
     </item>
     
     <item>
       <title>Evolution of Covid-19 in Texas</title>
-      <link>/post/covidan/</link>
+      <link>https://skipkrueger.com/post/covidan/</link>
       <pubDate>Sat, 25 Apr 2020 00:00:00 +0000</pubDate>
       
-      <guid>/post/covidan/</guid>
+      <guid>https://skipkrueger.com/post/covidan/</guid>
       <description>Using GGANIMATE to map Covid-19 cases in Texas counties over time.
 Making a map of Texas counties with Coronavirus cases, and tracking the cases over time. The goal is to show the evolution of the virus in Texas for every Friday for which there is data. This is cumulative cases, not new cases.
 Libraries needed:library(sf);library(raster);library(dplyr);library(spData);library(tmap);library(leaflet); library(mapview); library(ggplot2); library(shiny); library(rgdal);library(broom);library(tidyverse);library(tigris); library(rgdal);library(htmltools);library(viridis); library(raster);library(sp);library(RCurl);library(tidycensus);library(tmaptools);library(manipulateWidget); library(maps); library(tidyverse);library(leaflet.minicharts); library(gganimate)(well, OK, I don’t need all those libraries for this function, but I just keep that chuck for all my mapping needs.</description>

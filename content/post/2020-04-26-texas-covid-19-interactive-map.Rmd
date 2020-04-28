@@ -17,6 +17,10 @@ Using ```LEAFLET``` and ```WIDGET``` to map Covid-19 cases in Texas counties. Ma
 <BR>
 <BR><BR><BR><BR>
 
+##### For an example of this in action, see [this website](https://txcovdash.skipkrueger.com/).
+<BR>
+
+
 #### Libraries needed:
 
 ``` {r,results="hide"}
