@@ -18,7 +18,7 @@
       
       <guid>https://skipkrueger.com/post/tx-covid-interactive-map/</guid>
       <description>Using LEAFLET and WIDGET to map Covid-19 cases in Texas counties. Map clickable popups. The mapped data represents total cumulative cases as of the date in the code below, as recorded by the New York Times and reported in its github repository of data on the coronavirus.
-For an example of this in action, see this website.
+For an example of this in action, see this website.
 Libraries needed:library(sf);library(raster);library(dplyr);library(spData);library(tmap);library(leaflet); library(mapview); library(ggplot2); library(shiny); library(rgdal);library(broom);library(tidyverse);library(tigris); library(rgdal);library(htmltools);library(viridis); library(raster);library(sp);library(RCurl);library(tidycensus);library(tidyverse);library(tmaptools);library(manipulateWidget);library(leaflet.</description>
     </item>
     
