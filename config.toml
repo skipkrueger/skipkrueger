@@ -1,7 +1,6 @@
 baseurl = "https://skipkrueger.com/"
 title = "Skip Krueger"
 theme = "hugo-creative-portfolio-theme"
-#highlight = espresso
 languageCode = "en-us"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
