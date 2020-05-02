@@ -3,41 +3,46 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://skipkrueger.com/post/tx-covid-interactive-map/</loc>
+    <loc>/post/sales-tax-revenue/</loc>
+    <lastmod>2020-04-30T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/tx-covid-interactive-map/</loc>
     <lastmod>2020-04-26T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://skipkrueger.com/post/covidan/</loc>
+    <loc>/post/covidan/</loc>
     <lastmod>2020-04-25T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://skipkrueger.com/post/</loc>
-    <lastmod>2020-04-26T00:00:00+00:00</lastmod>
+    <loc>/post/</loc>
+    <lastmod>2020-04-30T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://skipkrueger.com/</loc>
-    <lastmod>2020-04-26T00:00:00+00:00</lastmod>
+    <loc>/</loc>
+    <lastmod>2020-04-30T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://skipkrueger.com/about/</loc>
+    <loc>/about/</loc>
     <lastmod>2020-04-25T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://skipkrueger.com/contact/</loc>
+    <loc>/contact/</loc>
     <lastmod>2016-11-06T13:00:25+05:30</lastmod>
   </url>
   
   <url>
-    <loc>https://skipkrueger.com/categories/</loc>
+    <loc>/categories/</loc>
   </url>
   
   <url>
-    <loc>https://skipkrueger.com/tags/</loc>
+    <loc>/tags/</loc>
   </url>
   
 </urlset>

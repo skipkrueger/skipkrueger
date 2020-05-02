@@ -1,0 +1,200 @@
+---
+title: Sales Tax Revenue
+author: Skip Krueger
+date: '2020-04-30'
+slug: sales-tax-revenue
+description: Developing database for Texas sales tax revenue analysis
+#image: img/portfolio/covmap.jpeg
+categories: []
+tags: []
+weight: 1
+---
+This code develops a  database of Texas local government sales tax revenue.
+<BR><BR><BR>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
+```
+
+#### Libraries and BLS api key handling
+<BR>
+#### You need to [get an api key from BLS](https://data.bls.gov/registrationEngine/){target="_blank"}. 
+<BR>
+<BR>
+
+```{r, results="hide"}
+library(RSocrata); library(tidyverse); library(RCurl); library(dplyr);
+library(readr); library(dplyr); library(blsAPI); library(runner);
+library(rjson); library(blscrapeR); library(skimr); library(zoo)
+#set_bls_key("your-bls-api-key-goes-here")
+readRenviron("~/.Renviron")
+#Sys.getenv("BLS_KEY")
+
+```
+<BR>
+
+#### Older sales tax revenue
+
+Sales tax revenue comes from my github, where I saved the csv files I received via email from the Comptroller's Office.
+
+```{r, results="hide"}
+url1 <- "https://raw.githubusercontent.com/skipkrueger/Data/master/TxLocalSalesTax1.csv"
+otx1 <- read_csv(url(url1))
+url2 <- "https://raw.githubusercontent.com/skipkrueger/Data/master/TxLocalSalesTax2.csv"
+otx2 <- read_csv(url(url2))
+otx3 <- rbind(otx1,otx2)
+names(otx3)[names(otx3) == "TA ID"] <- "taxid"
+names(otx3)[names(otx3) == "TAX AUTHORITY NAME"] <- "oldname"
+names(otx3)[names(otx3) == "ALLOCATION MONTH"] <- "date"
+names(otx3)[names(otx3) == "NET PAYMENT"] <- "amt"
+otx3$type <- substr(otx3$taxid,1,1)
+otx3 <- subset(otx3, type == 2)
+otx3 <- filter(otx3, oldname!="OAK RIDGE")
+otx3$city <- if_else(otx3$taxid==2139059,"RENO (LAMAR CO.)",otx3$oldname)
+otx3$city <- if_else(otx3$taxid==2184062,"RENO (PARKER CO.)",otx3$oldname)
+otx3 <- subset(otx3,select = -c(oldname,type,taxid))
+otx3$date <- as.Date(otx3$date,"%m/%d/%Y")   # NOTE THE DATE FORMAT
+```
+
+```{r, eval=T,echo=T}
+head(otx3)
+```
+<BR>
+
+#### Latest sales tax revenue
+
+New sales tax revenue comes from the Texas data hub. And some clean-up.
+
+```{r, results="hide"}
+ntx <- read.socrata("https://data.texas.gov/resource/vfba-b57j.csv")
+ntx <- subset(ntx, report_year==2020)
+ntx <- subset(ntx, report_month!=3)
+ntx <- subset(ntx, report_month!=2)
+ntx <- subset(ntx, report_month!=1)
+names(ntx)[names(ntx) == "net_payment_this_period"] <- "amt"
+names(ntx)[names(ntx) == "report_month"] <- "month"
+names(ntx)[names(ntx) == "report_year"] <- "year"
+ntx$date <- paste(ntx$month,"/","1","/",ntx$year)      # NOTE THE DATE FORMAT
+ntx$date <- gsub(" ","",ntx$date)                      # NOTE THE DATE FORMAT
+ntx$date <- as.Date(ntx$date,"%m/%d/%Y")               # NOTE THE DATE FORMAT
+ntx <- ntx %>% mutate_each(funs(toupper),city)
+ntx <- subset(ntx, select = -c(comparable_payment_prior_year,
+                               period_percent_change,
+                               payments_to_date,
+                               previous_payments_to_date,
+                               ytd_percent_change,
+                               report_period_type,month,year))
+txall <- rbind(otx3,ntx)
+
+txall <- txall %>%
+  group_by(city) %>%
+  mutate(lead = lead(amt,2))
+#rm(url1,url2,otx1,otx2,otx3,ntx)        #OPTIONALLY, THE ENV CAN BE CLEANED UP
+
+```
+
+```{r, eval=T,echo=T}
+head(txall)
+```
+<BR>
+<BR>
+
+#### Get the CPI data from the BLS
+
+Note that even with a bls key, it takes 2 downloads to get all the CPI data. Without the key, you have to run 4 downloads, and can only do so a couple of times before the allowable limit is reached.
+
+
+```{r, results="hide"}
+
+df1 <- bls_api("CUSR0000SA0",startyear = 1990, endyear = 2020,registrationKey = "BLS_KEY")
+df2 <- bls_api("CUSR0000SA0",startyear = 2010, endyear = 2020,registrationKey = "BLS_KEY")
+df2 <- subset(df2,select = -c(latest))
+
+infl <- rbind(df1,df2)
+infl <- subset(infl,select = -c(footnotes,seriesID))
+infl$period <- substr(infl$period,2,3)
+infl$date <- paste(infl$period,"/","1","/",infl$year)
+infl$date <- gsub(" ","",infl$date)
+infl$date2 <- as.Date(infl$date,"%m/%d/%Y") # the key is the capital 'Y'
+infl$deflate <- (259.050/infl$value)        # inflation in February 
+
+```
+
+```{r, eval=T,echo=T}
+head(infl)
+```
+<BR>
+
+#### Join the data
+
+<BR>
+
+```{r, eval=T,echo=T}
+txadj <- left_join(txall,infl,by=c("date" = "date2"))
+
+```
+<BR>
+
+#### Adjust for inflation
+
+<BR>
+This version makes all values equivalent to February 2020 dollars. This is a bit of a pain because it means the standard changes every month, and the formula for the deflator (in the above code chunk, line 119) has to be updated and hard-coded every time. The up side to this approach is that the numbers are in the value that the average person will understand. That understanding may not mean much since the data is converted further down to percent change, so no dollar values actually appear in this version of the analysis, at this time.
+<BR>
+
+```{r, eval=T,echo=T}
+txadj$real <- (txadj$deflate * txadj$lead) # real = inflation-adjusted "lead" revs
+
+```
+
+
+#### Percent change
+
+Calculate the percent change from the same month in the previous year. Note the 12 in line 157 - this stipulates the number of time units back to which the lag applies. 
+
+The basic approach is to generate a new column of the data of interest lagged by the specified number of time periods. And then apply the math to the contemporaneous difference between the two columns. 
+
+```{r, eval=T,echo=T}
+tr4 <- txadj %>%
+  group_by(city) %>%
+  mutate(lag = lag(real,12)) %>%
+  mutate(pct.change = (real - lag)/lag*100)       # pct.change = 12-month change in real 
+```
+
+#### 48 month moving average to calculate the last 4 years' average
+
+At this point, I am really just interested in the average change for the last 4 years. This is a little of a complicated way to get there, but I took a rolling mean (moving average) of the last 48 months, and then just keep the latest date so that the cross section has the 4-year average for each city. 
+
+
+```{r, eval=T,echo=T}
+tr4$d.ave <- ave(tr4$pct.change, tr4$city, 
+                  FUN= function(x) rollmean(x, k=48,align="right", na.pad=T))
+```
+
+### Get just the latest month data to have 1 obs with the 4-yr average per city 
+
+
+
+
+```{r, eval=T,echo=T}
+tr5 <- subset(tr4, year==2020)
+tr5 <- subset(tr5, period=="02")
+```
+
+
+#### Look at just the top cities
+
+
+```{r, eval=T,echo=T}
+topcities <- subset(tr5, amt>499000)
+```
+
+```{r, eval=T,echo=T}
+summary(topcities)
+```
+
+
+
+
+
+
+

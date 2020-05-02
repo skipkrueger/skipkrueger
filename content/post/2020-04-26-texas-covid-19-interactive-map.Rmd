@@ -13,7 +13,7 @@ weight: 1
 knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
 ```
 
-Using ```LEAFLET``` and ```WIDGET``` to map Covid-19 cases in Texas counties. Map clickable popups. The mapped data represents total cumulative cases as of the date in the code below, as recorded by the New York Times and reported in its github repository of data on the coronavirus.
+Using `LEAFLET` and `WIDGET` to map Covid-19 cases in Texas counties. Map clickable popups. The mapped data represents total cumulative cases as of the date in the code below, as recorded by the New York Times and reported in its github repository of data on the coronavirus.
 <BR>
 <BR>
 

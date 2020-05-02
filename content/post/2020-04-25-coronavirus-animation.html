@@ -110,7 +110,7 @@ m</code></pre>
 <h4>Making the map</h4>
 <p>Finally, I want the map. I can use a facet version or a gganimate version.</p>
 <p>Note that I’m using transition_manual here, which does not have any blending from one time point to another. I wasn’t able to figure out how to utilize other possible transition types in combination with geom_sf, which I utilize instead of geom_polygon because I think the map looks better here.</p>
-<pre class="r"><code>m &lt;- ggplot(txgeo) +
+<pre class="r"><code>anim1 &lt;- ggplot(txgeo) +
   geom_sf(aes(fill=cat),color=&#39;white&#39;)+
   scale_size_identity(.001)+
   scale_fill_manual(values=pal) + 
@@ -125,7 +125,6 @@ m</code></pre>
        fill = &quot;Cases&quot;)+
 #  facet_wrap(~date,ncol=4)+
   transition_manual(date) # Note that this is the only different line compared to above.
-  
-m</code></pre>
+animate(anim1, duration = 18, end_pause = 4)  </code></pre>
 <p><img src="/post/2020-04-25-coronavirus-animation_files/figure-html/unnamed-chunk-8-1.gif" /><!-- --></p>
 </div>

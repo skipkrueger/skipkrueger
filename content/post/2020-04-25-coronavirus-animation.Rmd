@@ -164,7 +164,7 @@ Note that I'm using transition_manual here, which does not have any blending fro
 
 ```{r, eval=T,echo=T}
 
-m <- ggplot(txgeo) +
+anim1 <- ggplot(txgeo) +
   geom_sf(aes(fill=cat),color='white')+
   scale_size_identity(.001)+
   scale_fill_manual(values=pal) + 
@@ -179,8 +179,7 @@ m <- ggplot(txgeo) +
        fill = "Cases")+
 #  facet_wrap(~date,ncol=4)+
   transition_manual(date) # Note that this is the only different line compared to above.
-  
-m
+animate(anim1, duration = 18, end_pause = 4)  
 
 
 ```
