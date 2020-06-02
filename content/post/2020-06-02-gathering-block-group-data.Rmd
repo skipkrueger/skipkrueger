@@ -100,11 +100,11 @@ medfaminc <- map2_dfr(
 
 For this project, I downloaded:
 
-* AApop = # of African Americans in block group
-* txHispop = # of Hispanics in block group
-* txwpop = # of non-Hispanic whites in block group
-* txtotpop = # of total population in block group
-* txmedinc = median family income of block group
+* AApop =    # of African Americans in block group   (B03002_004)
+* txHispop = # of Hispanics in block group           (B03003_003)
+* txwpop =   # of non-Hispanic whites in block group (B03002_003)
+* txtotpop = # of total population in block group    (B02001_001)
+* txmedinc = median family income of block group     (B19113_001)
 
 These Census Tables are downloaded as a separate data.table with a long text name and the measurement error, in addition to the geo-id and variable of interest. So, the code below cleans up each data.table a bit and changes the geo-id name in each so that the variables do not have the same name when they are combined.
 

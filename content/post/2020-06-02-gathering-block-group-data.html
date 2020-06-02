@@ -87,11 +87,11 @@ medfaminc &lt;- map2_dfr(
 <h5>Cleaning and Merging the Data</h5>
 <p>For this project, I downloaded:</p>
 <ul>
-<li>AApop = # of African Americans in block group</li>
-<li>txHispop = # of Hispanics in block group</li>
-<li>txwpop = # of non-Hispanic whites in block group</li>
-<li>txtotpop = # of total population in block group</li>
-<li>txmedinc = median family income of block group</li>
+<li>AApop = # of African Americans in block group (B03002_004)</li>
+<li>txHispop = # of Hispanics in block group (B03003_003)</li>
+<li>txwpop = # of non-Hispanic whites in block group (B03002_003)</li>
+<li>txtotpop = # of total population in block group (B02001_001)</li>
+<li>txmedinc = median family income of block group (B19113_001)</li>
 </ul>
 <p>These Census Tables are downloaded as a separate data.table with a long text name and the measurement error, in addition to the geo-id and variable of interest. So, the code below cleans up each data.table a bit and changes the geo-id name in each so that the variables do not have the same name when they are combined.</p>
 <p>Since all the data.files are exactly the same length, they can easily be combined with <code>cbind</code>.</p>
