@@ -153,7 +153,7 @@ Then I can create one categorical variable for block groups that have:
 * All other block groups 
 
 
-```{r eval=FALSE, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
+```{r eval=FALSE, message=FALSE, warning=FALSE, results='hide'}
 txbg$AAper <- txbg$AApop/txbg$totpop*100
 txbg$wper <- txbg$wpop/txbg$totpop*100
 txbg$Hper <- txbg$Hispop/txbg$totpop*100

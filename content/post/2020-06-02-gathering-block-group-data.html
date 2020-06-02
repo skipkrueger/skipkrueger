@@ -132,6 +132,23 @@ names(txbg)[names(txbg) == &quot;GEOIDtot&quot;] &lt;- &quot;GEOID&quot;</code><
 <li>White population majority</li>
 <li>All other block groups</li>
 </ul>
+<pre class="r"><code>txbg$AAper &lt;- txbg$AApop/txbg$totpop*100
+txbg$wper &lt;- txbg$wpop/txbg$totpop*100
+txbg$Hper &lt;- txbg$Hispop/txbg$totpop*100
+
+txbg$hiscat &lt;- if_else(txbg$Hper&gt;50,1,0)  
+txbg$aacat &lt;- if_else(txbg$AAper&gt;50,1,0)
+txbg$wcat &lt;- if_else(txbg$wper&gt;50,1,0)
+
+summary(txbg$medinc)  
+txbg$inccat &lt;- if_else(txbg$medinc&gt;63965,1,0)
+
+txbg$cat &lt;- &quot;Other&quot;
+txbg$cat &lt;- if_else(txbg$aacat==1,&quot;African American&quot;,txbg$cat)
+txbg$cat &lt;- if_else(txbg$hiscat==1,&quot;Hispanic&quot;,txbg$cat)
+txbg$cat &lt;- if_else(txbg$wcat==1,&quot;White&quot;,txbg$cat)
+txbg$cat &lt;- as.factor(txbg$cat)
+txbg$cat &lt;- as.character(txbg$cat)</code></pre>
 <p><BR></p>
 </div>
 <div id="final-clean-up" class="section level5">
