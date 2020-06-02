@@ -6,10 +6,23 @@
     <description>Recent content in Posts on Skip Krueger</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 30 Apr 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 02 Jun 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Gathering Block Group Data</title>
+      <link>/post/gathering-block-group-data/</link>
+      <pubDate>Tue, 02 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/gathering-block-group-data/</guid>
+      <description>Using TIDYCENSUS to collect Census data for Block GroupsThis code downloads basic Census data for BLOCK GROUPS. It’s more convoluted than it should be. There is a work-around, but it is clunky.This is a Census issue, not an R issue or tidycensus issue.
+You can check the discussion at this link.
+Libraries needed and numbering format
+library(tidycensus);library(tidyverse);library(tibble);library(data.table);library(dplyr);library(lubridate);library(ggplot2);library(scales)options(scipen=999)
+Census Tables AvailableThe first trick is figuring out which tables we need from the Census tables.</description>
+    </item>
     
     <item>
       <title>Sales Tax Revenue</title>
