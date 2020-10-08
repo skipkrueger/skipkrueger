@@ -1,62 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Posts on Skip Krueger</title>
-    <link>/post/</link>
-    <description>Recent content in Posts on Skip Krueger</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Tue, 02 Jun 2020 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>Gathering Block Group Data</title>
-      <link>/post/gathering-block-group-data/</link>
-      <pubDate>Tue, 02 Jun 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/post/gathering-block-group-data/</guid>
-      <description>Using TIDYCENSUS to collect Census data for Block GroupsThis code downloads basic Census data for BLOCK GROUPS. It’s more convoluted than it should be. There is a work-around, but it is clunky.This is a Census issue, not an R issue or tidycensus issue.
-You can check the discussion at this link.
-Libraries needed and numbering format
-library(tidycensus);library(tidyverse);library(tibble);library(data.table);library(dplyr);library(lubridate);library(ggplot2);library(scales)options(scipen=999)
-Census Tables AvailableThe first trick is figuring out which tables we need from the Census tables.</description>
-    </item>
-    
-    <item>
-      <title>Sales Tax Revenue</title>
-      <link>/post/sales-tax-revenue/</link>
-      <pubDate>Thu, 30 Apr 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/post/sales-tax-revenue/</guid>
-      <description>This code develops a database of Texas local government sales tax revenue.
-Libraries and BLS api key handling#### You need to get an api key from BLS.
-library(RSocrata); library(tidyverse); library(RCurl); library(dplyr);library(readr); library(dplyr); library(blsAPI); library(runner);library(rjson); library(blscrapeR); library(skimr); library(zoo)#set_bls_key(&amp;quot;your-bls-api-key-goes-here&amp;quot;)readRenviron(&amp;quot;~/.Renviron&amp;quot;)#Sys.getenv(&amp;quot;BLS_KEY&amp;quot;)
-Older sales tax revenueSales tax revenue comes from my github, where I saved the csv files I received via email from the Comptroller’s Office.</description>
-    </item>
-    
-    <item>
-      <title>Texas Covid-19 Interactive Map</title>
-      <link>/post/tx-covid-interactive-map/</link>
-      <pubDate>Sun, 26 Apr 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/post/tx-covid-interactive-map/</guid>
-      <description>Using LEAFLET and WIDGET to map Covid-19 cases in Texas counties. Map clickable popups. The mapped data represents total cumulative cases as of the date in the code below, as recorded by the New York Times and reported in its github repository of data on the coronavirus.
-For an example of this in action, see this website.
-Libraries needed:library(sf);library(raster);library(dplyr);library(spData);library(tmap);library(leaflet); library(mapview); library(ggplot2); library(shiny); library(rgdal);library(broom);library(tidyverse);library(tigris); library(rgdal);library(htmltools);library(viridis); library(raster);library(sp);library(RCurl);library(tidycensus);library(tidyverse);library(tmaptools);library(manipulateWidget);library(leaflet.</description>
-    </item>
-    
-    <item>
-      <title>Evolution of Covid-19 in Texas</title>
-      <link>/post/covidan/</link>
-      <pubDate>Sat, 25 Apr 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/post/covidan/</guid>
-      <description>Using GGANIMATE to map Covid-19 cases in Texas counties over time.
-Making a map of Texas counties with Coronavirus cases, and tracking the cases over time. The goal is to show the evolution of the virus in Texas for every Friday for which there is data. This is cumulative cases, not new cases.
-Libraries needed:library(sf);library(raster);library(dplyr);library(spData);library(tmap);library(leaflet); library(mapview); library(ggplot2); library(shiny); library(rgdal);library(broom);library(tidyverse);library(tigris); library(rgdal);library(htmltools);library(viridis); library(raster);library(sp);library(RCurl);library(tidycensus);library(tmaptools);library(manipulateWidget); library(maps); library(tidyverse);library(leaflet.minicharts); library(gganimate)(well, OK, I don’t need all those libraries for this function, but I just keep that chuck for all my mapping needs.</description>
-    </item>
-    
-  </channel>
-</rss>

@@ -1,0 +1,222 @@
+---
+title: DFWcitieseval
+author: ''
+date: '2020-10-08'
+slug: dfwcitieseval
+categories: []
+tags: []
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	eval = FALSE,
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+```
+
+##### Identifying cities for possible inclusion in Covid project
+
+This code sorts Census-designated "places" cities and similar places in the DFW metro region.
+
+<BR>
+
+##### Libraries needed and numbering format
+<BR>
+
+```{r, results="hide"}
+library(dplyr); library(tidyr);library(broom);library(tigris);library(tidyverse);
+library(tidycensus);library(sf);library(knitr);library(gt)
+options(tigris_class = "sf")
+options(tigris_use_cache = TRUE)
+options(scipen=999)
+```
+<BR>
+
+##### Census Tables Available
+
+The first trick is figuring out which tables we need from the Census tables. The `tidycensus` library makes this super-easy. But once you load the list of tables, you have to scroll through that table and figure out the exact table you need. Note that not all tables in the list are available at the Block Group level for all time points. But you can search the list if you view the table and then use the search tool on the top right of the list.
+
+```{r eval=FALSE, message=FALSE, warning=FALSE, results='hide'}
+#v17 <- load_variables(2018, "acs5", cache = TRUE)
+#view(v17)
+```
+<BR>
+
+##### Downloading the Data
+
+The download of cities can be limited to Texas cities, but to select only cities in the DFW metro area, we would have to get a list of officially designated counties, then get the list of cities in each county, and then extrapolate. But using the mapping functions available in R, we can identify the cities quickly by geographically filtering by the maps of the core based statistical areas. In this case, it's the "Dallas-Fort Worth-Arlington CBSA. Some portions of the cities are outside the CBSA (see the map), but at least some part of each of the cities is inside the CBSA, so that makes them potentially fair game, I think.
+
+
+```{r eval=FALSE, message=FALSE, warning=FALSE, results='hide'}
+txcities <- places("TX",cb=TRUE)
+
+cb <- core_based_statistical_areas(cb = TRUE)
+dfw <- filter(cb, grepl("Dallas-Fort Worth-Arlington, TX", NAME))
+
+dfwcities <- txcities[dfw,]
+
+p <- dfwcities
+
+ggplot() + 
+  geom_sf(data = p) + 
+  geom_sf(data = dfw, fill = NA, color = "red")
+```
+<BR>
+
+##### Downloading Census population data
+
+The American Community Survey from the Census Bureau has estimations of population, income, poverty, and race data for cities. We need to download and then clean it up. The section below identifies the ACS tables that are utilized here.
+
+```{r eval=FALSE, message=FALSE, warning=FALSE, results='hide'}
+pop <- get_acs(geography = "place", variables = 'B01003_001', 
+              state = "TX", survey='acs5',geometry = TRUE,year=2018)
+hhi <- get_acs(geography = "place", variables = 'S1901_C01_012E', 
+               state = "TX", survey='acs5',geometry = TRUE,year=2018)
+pov <- get_acs(geography = "place", variables = 'S1701_C03_001E', 
+               state = "TX", survey='acs5',geometry = TRUE,year=2018)
+white <- get_acs(geography = "place", variables = 'B03002_003E', 
+               state = "TX", survey='acs5',geometry = TRUE,year=2018)
+black <- get_acs(geography = "place", variables = 'B03002_004E', 
+                 state = "TX", survey='acs5',geometry = TRUE,year=2018)
+Hispanic <- get_acs(geography = "place", variables = 'B03002_012E', 
+                 state = "TX", survey='acs5',geometry = TRUE,year=2018)
+```
+
+##### Preparing the Data for Analysis
+
+```{r eval=FALSE, message=FALSE, warning=FALSE, results='hide'}
+black <- select(black,-c(moe,NAME,variable))
+names(black)[names(black) == "estimate"] <- "black"
+names(black)[names(black) == "GEOID"] <- "GEOIDblack"
+
+Hispanic <- select(Hispanic,-c(moe,NAME,variable))
+names(Hispanic)[names(Hispanic) == "estimate"] <- "Hispanic"
+names(Hispanic)[names(Hispanic) == "GEOID"] <- "GEOIDhisp"
+
+white <- select(white,-c(moe,NAME,variable))
+names(white)[names(white) == "estimate"] <- "white"
+names(white)[names(white) == "GEOID"] <- "GEOIDwhite"
+
+hhi <- select(hhi,-c(moe,NAME,variable))
+names(hhi)[names(hhi) == "estimate"] <- "hhi"
+names(hhi)[names(hhi) == "GEOID"] <- "GEOIDhhi"
+
+pov <- select(pov,-c(moe,NAME,variable))
+names(pov)[names(pov) == "estimate"] <- "pov"
+names(pov)[names(pov) == "GEOID"] <- "GEOIDpov"
+
+pop <- select(pop,-c(moe,NAME,variable))
+names(pop)[names(pop) == "estimate"] <- "pop"
+names(pop)[names(pop) == "GEOID"] <- "GEOIDpop"
+
+txpop <- cbind(pop,Hispanic,black,white,hhi,pov)
+txpop <- select(txpop,-c(3,5,7,9,11,13,14,15,16,17,18))
+names(txpop)[names(txpop) == "GEOIDpop"] <- "GEOID"
+txpop <- st_drop_geometry(txpop)
+
+dfwall <- left_join(dfwcities,txpop,by="GEOID")
+dfwall <- select(dfwall,-c(1,2,3,4))
+
+hr <- read.csv(file = "homerule.csv")
+hr$GEOID <- as.character(hr$GEOID)
+dfwall2 <- left_join(dfwall,hr,by="GEOID")
+dfwall2 <- select(dfwall2,-c(12,13))
+
+dfwall2$wpop <- dfwall2$white/dfwall2$pop*100
+dfwall2$bpop <- dfwall2$black/dfwall2$pop*100
+dfwall2$hpop <- dfwall2$Hispanic/dfwall2$pop*100
+
+dfwall2$bmaj <- ifelse(dfwall2$bpop>49.9,1,0)
+dfwall2$hmaj <- ifelse(dfwall2$hpop>49.9,1,0)
+dfwall2$wmaj <- ifelse(dfwall2$wpop>49.9,1,0)
+dfwall2$bmaj <- ifelse(dfwall2$bpop>49.9,1,0)
+
+summary(dfwall2$pov)
+dfwall2$hipov <- ifelse(dfwall2$pov>8.49,1,0)
+
+dfwall3 <- dfwall2 %>% as_tibble() %>% select(-geometry) #dropping the geom var
+```
+
+##### Tables
+
+```{r eval=FALSE, message=FALSE, warning=FALSE, results='hide'}
+blackmaj <- dfwall3[ which(dfwall3$bmaj=='1'),]
+blackmaj <- blackmaj[order(-blackmaj$pop),]
+gt(blackmaj[,c(2,6,10,11,12,14,15,16)]) %>%
+  tab_header(
+    title = "DFW Cities with Majority Black Population",
+#    subtitle = "Something Useful Here"
+  ) %>%
+  fmt_number(
+    columns = vars(wpop,hpop,bpop),
+    decimals = 1,
+    suffixing = TRUE
+     )%>%
+  fmt_number(
+    columns = vars(pop),
+    decimals = 0,
+    sep_mark = ","
+)%>%
+  fmt_currency(
+    columns = vars(hhi),
+    decimals = 0,
+    sep_mark = ","
+  )
+```
+
+```{r eval=FALSE, message=FALSE, warning=FALSE, results='hide'}
+hispmaj <- dfwall3[ which(dfwall3$hmaj=='1'),]
+hispmaj <- hispmaj[order(-hispmaj$pop),]
+
+gt(hispmaj[,c(2,6,10,11,12,14,15,16)]) %>%
+  tab_header(
+    title = "DFW Cities with Majority Hispanic Population",
+    #    subtitle = "Something Useful Here"
+  ) %>%
+  fmt_number(
+    columns = vars(wpop,hpop,bpop),
+    decimals = 1,
+    suffixing = TRUE
+  )%>%
+  fmt_number(
+    columns = vars(pop),
+    decimals = 0,
+    sep_mark = ","
+  )%>%
+  fmt_currency(
+    columns = vars(hhi),
+    decimals = 0,
+    sep_mark = ","
+  )
+```
+
+```{r eval=FALSE, message=FALSE, warning=FALSE, results='hide'}
+wmaj <- dfwall3[ which(dfwall3$wmaj=='1'),]
+wmaj <- wmaj[order(-wmaj$pop),]
+gt(wmaj[1:75,c(2,6,10,11,12,14,15,16)]) %>%
+  tab_header(
+    title = "DFW Cities with Majority White Population",
+        subtitle = "Top 75 based on population size"
+  ) %>%
+  fmt_number(
+    columns = vars(wpop,hpop,bpop),
+    decimals = 1,
+    suffixing = TRUE
+  )%>%
+  fmt_number(
+    columns = vars(pop),
+    decimals = 0,
+    sep_mark = ","
+  )%>%
+  fmt_currency(
+    columns = vars(hhi),
+    decimals = 0,
+    sep_mark = ","
+  )
+```
+
+
+

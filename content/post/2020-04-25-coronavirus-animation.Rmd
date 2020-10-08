@@ -2,7 +2,7 @@
 title: Evolution of Covid-19 in Texas
 author: Skip Krueger
 date: '2020-04-25'
-slug: covidan
+slug: covidanim
 draft: false
 image: img/portfolio/try1.gif
 showonlyimage: False
@@ -29,7 +29,8 @@ library(leaflet); library(mapview); library(ggplot2);
 library(shiny); library(rgdal);library(broom);library(tidyverse);library(tigris); library(rgdal);library(htmltools);library(viridis); library(raster);library(sp);library(RCurl);library(tidycensus);
 library(tmaptools);library(manipulateWidget); library(maps); 
 library(tidyverse);library(leaflet.minicharts); library(gganimate)
-
+options(tigris_class = "sf")
+options(tigris_use_cache = TRUE)
 ```
 
 (well, OK, I don't need all those libraries for this function, but I just keep that chuck for all my mapping needs.)
